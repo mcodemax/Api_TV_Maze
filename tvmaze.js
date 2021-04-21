@@ -70,16 +70,33 @@ function populateShows(shows) {
            <div class="card-body">
              <h5 class="card-title">${show.name}</h5>
              <p class="card-text">${show.summary}</p>
+
+             <div>
+              <button class='epbtn'>Episodes</button>             
+             </div>
            </div>
-         </div>
+         </div> 
+         
        </div>
       `);
 
     $showsList.append($item);
   }
+
+  //add evt listener to episodes btn to list episodes
+
 }
 
 
+/**evt listener on episodes btn */
+$('#shows-list').on('click', '.epbtn', async function() {
+  
+  const id = $(this).closest('[data-show-id]').data('show-id');
+
+  const episodes = await getEpisodes(id);//wait for this query to return
+  populateEpisodes(episodes);
+
+});
 /** Handle search form submission:
  *    - hide episodes area
  *    - get list of matching shows and show in shows list
@@ -114,16 +131,19 @@ async function getEpisodes(id) {
   // TODO: return array-of-episode-info, as described in docstring above
 }
 
-
+/**populate episodes on UI */
 function populateEpisodes(epArr){
   document.querySelector('#episodes-area').removeAttribute('style');
 
   //make a loop that ataches each ep to dom
   for(let x of epArr){
-    $('#episodes-list').append(`<li>${x.name} (Season ${x.season} Episode ${x.number}</li>`);
-    console.log(x)
+    $('#episodes-list').append(`<li>${x.name} (Season ${x.season} Episode ${x.number})</li>`);
   }
 }
+
+
+
+
 
 // populateEpisodes([{name: 'name', season: 2, number: 5},
 // {name: 'name', season: 2, number: 5},
